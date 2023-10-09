@@ -1,7 +1,6 @@
 from imdb import Cinemagoer
 import json
 import csv
-from sqlalchemy import column
 
 #web scraper built by Caleb Lee (2301831), making use of the Cinemagoer API
 #custom JSON Encoder, since type Movie in list is not JSON serializable
