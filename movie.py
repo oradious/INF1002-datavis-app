@@ -73,8 +73,15 @@ def graph_layout():
         
         return html.Div([
             html.Div(children='Movie with Data', style={'fontFamily': 'Courier New', 'fontSize': 45, 'textAlign': 'center'}),
+            #To change the y axis labels
+            
             
             dcc.RadioItems(options=[{'label': 'Directors', 'value': 'directors'}, {'label': 'Title', 'value': 'title'}],value='title', id='controls-and-radio-item'),
+            
+            #To change the x axis labels
+            dcc.RadioItems(options=[{'label':'Rating','value':'rating'},{'label':'Votes','value':'votes'}],value='rating',id='xaxis_change'),
+            
+            
             dcc.Dropdown(
                 id='genre-dropdown',
                 options=[{'label': genre, 'value': genre} for genre in genres],
@@ -82,15 +89,16 @@ def graph_layout():
                 placeholder='Select genre(s)'
             ),
             
+            
             dash_table.DataTable(data=df_sorted.to_dict('records'),
                                  columns=[{"name": i, "id": i} for i in df_sorted.columns], 
-                                 page_size=5, style_cell={'textAlign': 'center', 'width': '100px','overflow':'hidden','textOverflow':'ellipsis','maxWidth':50},
+                                 page_size=5, style_cell={'textAlign': 'center', 'width': '100px','overflow':'hidden','textOverflow':'ellipsis','maxWidth':0},
                                  
                                  
                                  #allow user to hover over the table and read the full content
                                  tooltip_data=[{column:{'value':str(value),'type':'markdown'}
                                                 for column,value in row.items()
-                                                }for row in df.to_dict('records')],
+                                                }for row in df_sorted.to_dict('records')],
                                                 tooltip_duration =None,
                                  
                                  #allow user to filter the content of the table
@@ -125,7 +133,7 @@ def update_table(contents):
     if contents is None:
         raise PreventUpdate
 
-    content_type, content_string = contents.split(',')
+    content_string = contents.split(',')
     decoded = base64.b64decode(content_string)
 
     try:
@@ -152,24 +160,35 @@ dash_app.layout = serve_layout
 @dash_app.callback(
     Output(component_id='controls-and-graph', component_property='figure'),
     [Input(component_id='controls-and-radio-item', component_property='value'),
-     Input(component_id='movie-table', component_property='data')]
+     Input(component_id='movie-table', component_property='data'),
+     Input(component_id='xaxis_change',component_property='value')
+    ]
 )
 
-def update_graph_axis(col_chosen, table_data):
+def update_graph_axis(col_chosen, table_data,xaxis_change):
     if not table_data:
         raise PreventUpdate
     
-    # Change ratings from object to int/float then get the average rating if there is more than 
+    # Change ratings from object to int/float then 
     df_filtered = pd.DataFrame(table_data)
-    df_filtered['rating'] = pd.to_numeric(df_filtered['rating'], errors='coerce')
-    df_group_by_ratings=df_filtered.groupby(col_chosen).rating.mean().reset_index()
+    df_filtered[xaxis_change] = pd.to_numeric(df_filtered[xaxis_change], errors='coerce')
+    
+
+    #Remove the movies with no data as the movie is not released yet
+    df_filtered=df_filtered.dropna(subset=[xaxis_change])
+    
+    #get the average rating if the director has directed more than one movie in the csv/json file 
+    df_group_by_ratings=df_filtered.groupby(col_chosen)[xaxis_change].mean().reset_index()
+    
+    #Set the ratings in the graph so that the highest rating movie/director is on top
+    df_group_by_ratings=df_group_by_ratings.sort_values(by=xaxis_change,ascending=True)
 
     if df_filtered is not None:
         try:
 
-            fig = px.bar(df_group_by_ratings, x='rating', y=col_chosen, title=f"Ratings by {col_chosen}")
+            fig = px.bar(df_group_by_ratings, x=xaxis_change, y=col_chosen, title=f"Ratings by {col_chosen}")
             fig.update_layout(height=1000, width=1000)
-            fig.update_yaxes(categoryorder='category descending')
+            
             
             return fig
         except Exception as e:
