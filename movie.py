@@ -6,7 +6,7 @@ import  base64
 from dash.dependencies import Input, Output
 from dash.exceptions import PreventUpdate
 
-
+#done by Ming Quan (2301877) and Zhi Kang (2301862)
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'Secret key for Flask'
 
