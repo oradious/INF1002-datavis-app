@@ -1,6 +1,6 @@
 # INF1002 Python Data Visualisation App
 
-This repo contains the code for a data visualisation app for SIT's INF1002 Python Project.
+This repo contains the code for a data visualisation app for SIT's INF1002 Python Project. Check out our GitHub page <a href="https://github.com/oradious/INF1002-datavis-app/tree/master" target="_blank">here</a>.
 
 ## Setup Instructions
 

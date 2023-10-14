@@ -37,16 +37,21 @@ def movie_main():
                 director_name = director_data.get('name', 'N/A')
 
                 #Put a commna between the genres on the table
-                genres_list = movie_data.get('genres',[])
-                genres_str  = ','.join(genres_list)
+                genres = movie_data.get('genres',[])
+                genres_seperate  = ','.join(genres)
+
+                #Get Votes
+                votes = movie_data.get('votes','N/A')
+
 
                 
                 #Decide what to display on the table when uploading json file
                 movie_list.append({'title': title, 
                                    'Description': overview, 
                                    'rating': vote_average, 
-                                   'genres':genres_str,
-                                   'directors': director_name})
+                                   'genres':genres_seperate,
+                                   'directors': director_name,
+                                   'votes' : votes,})
             df=pd.DataFrame(movie_list)
 
         else:
@@ -79,7 +84,7 @@ def graph_layout():
             dcc.RadioItems(options=[{'label': 'Directors', 'value': 'directors'}, {'label': 'Title', 'value': 'title'}],value='title', id='controls-and-radio-item'),
             
             #To change the x axis labels
-            dcc.RadioItems(options=[{'label':'Rating','value':'rating'},{'label':'Votes','value':'votes'}],value='rating',id='xaxis_change'),
+            dcc.RadioItems(options=[{'label':'Rating','value':'rating'},{'label':'votes','value':'votes'}],value='rating',id='xaxis_change'),
             
             
             dcc.Dropdown(
@@ -168,12 +173,14 @@ dash_app.layout = serve_layout
 def update_graph_axis(col_chosen, table_data,xaxis_change):
     if not table_data:
         raise PreventUpdate
+        
+
+
     
     # Change ratings from object to int/float then 
     df_filtered = pd.DataFrame(table_data)
     df_filtered[xaxis_change] = pd.to_numeric(df_filtered[xaxis_change], errors='coerce')
     
-
     #Remove the movies with no data as the movie is not released yet
     df_filtered=df_filtered.dropna(subset=[xaxis_change])
     
