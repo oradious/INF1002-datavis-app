@@ -78,13 +78,7 @@ def graph_layout():
         
         return html.Div([
             html.Div(children='Movie with Data', style={'fontFamily': 'Courier New', 'fontSize': 45, 'textAlign': 'center'}),
-            #To change the y axis labels
             
-            
-            dcc.RadioItems(options=[{'label': 'Directors', 'value': 'directors'}, {'label': 'Title', 'value': 'title'}],value='title', id='controls-and-radio-item'),
-            
-            #To change the x axis labels
-            dcc.RadioItems(options=[{'label':'Rating','value':'rating'},{'label':'votes','value':'votes'}],value='rating',id='xaxis_change'),
             
             
             dcc.Dropdown(
@@ -108,6 +102,12 @@ def graph_layout():
                                  
                                  #allow user to filter the content of the table
                                  filter_action="native",sort_action="native",id='movie-table'),
+
+            #To change the y axis labels
+            dcc.RadioItems(options=[{'label': 'Directors', 'value': 'directors'}, {'label': 'Title', 'value': 'title'}],value='title', id='controls-and-radio-item',inline=True,style={'color':'black','size':20,"marginTop":20}),
+            
+            #To change the x axis labels
+            dcc.RadioItems(options=[{'label':'Rating','value':'rating'},{'label':'votes','value':'votes'}],value='rating',id='xaxis_change',inline=True,style={'color':'blue','size':20}),
             
             dcc.Graph(figure={}, id='controls-and-graph'),
             
