@@ -12,7 +12,7 @@ This repo contains the code for a data visualisation app for SIT's INF1002 Pytho
 
     <p>The application uses Flask Web App as its GUI. Run the movie.py class to start the web server, and then go to http://127.0.0.1:5000 on your web browser to access it</p>
 
-4. To find out more about how to use our application, you can check out our video <a href="" target="_blank">here</a>.
+4. To find out more about how to use our application, you can check out our video <a href="https://www.youtube.com/watch?v=X-Bwd2hspBY" target="_blank">here</a>.
 5. To find out more about how this project was done, please refer to the Project Report.
 6. To stop the application, go back to the command line and press Ctrl+C.
 
