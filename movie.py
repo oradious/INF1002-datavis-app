@@ -42,8 +42,6 @@ def movie_main():
 
                 #Get Votes
                 votes = movie_data.get('votes','N/A')
-
-
                 
                 #Decide what to display on the table when uploading json file
                 movie_list.append({'title': title, 
@@ -77,15 +75,16 @@ def graph_layout():
         genres = df_sorted['genres'].explode().unique() if 'genres' in df_sorted.columns else[]
         
         return html.Div([
-            html.Div(children='Movie with Data', style={'fontFamily': 'Courier New', 'fontSize': 45, 'textAlign': 'center'}),
+            html.Div(children='Movie with Data',style={'fontFamily': 'Courier New', 'fontSize': 45, 'textAlign': 'center','margin-bottom': '20px'}, className="test"),
             
-            
-            
+            html.Div([
+
             dcc.Dropdown(
                 id='genre-dropdown',
                 options=[{'label': genre, 'value': genre} for genre in genres],
                 multi=False,
                 placeholder='Select genre(s)'
+                ,style={'text-align': 'center','margin-bottom': '20px'}
             ),
             
             
@@ -102,22 +101,27 @@ def graph_layout():
                                  
                                  #allow user to filter the content of the table
                                  filter_action="native",sort_action="native",id='movie-table'),
-
+            html.P("Toggle Y-Axis: "),
             #To change the y axis labels
-            dcc.RadioItems(options=[{'label': 'Directors', 'value': 'directors'}, {'label': 'Title', 'value': 'title'}],value='title', id='controls-and-radio-item',inline=True,style={'color':'black','size':20,"marginTop":20}),
-            
+            dcc.RadioItems(options=[{'label': 'Directors', 'value': 'directors'}, {'label': 'Title', 'value': 'title'}],value='title', id='controls-and-radio-item',inline=True,style={'color':'black','font-size':20,"marginTop":20}),
+            html.P("Toggle X-Axis: "),
             #To change the x axis labels
-            dcc.RadioItems(options=[{'label':'Rating','value':'rating'},{'label':'votes','value':'votes'}],value='rating',id='xaxis_change',inline=True,style={'color':'blue','size':20}),
+            dcc.RadioItems(options=[{'label':'Rating','value':'rating'},{'label':'Votes','value':'votes'}],value='rating',id='xaxis_change',inline=True,style={'color':'blue','font-size':20}),
             
-            dcc.Graph(figure={}, id='controls-and-graph'),
             
-            html.Button('Download CSV', id='download-csv-button'),#a button for CSV download
+            dcc.Graph(figure={}, id='controls-and-graph',style={'text-align': 'center','margin': '20px'}),
+
+            html.P("Download your personalised data here:"),
+            
+            html.Button('Download CSV', id='download-csv-button',style={'textAlign': 'center','background-color':'green', 'color':'white', 'border-radius':'5px', 'padding': '20px', 'width':'15%'}),#a button for CSV download
             dcc.Download(id="download-csv"),
             
-            
-            html.Button('Download JSON', id='download-json-button'),#a button for JSON download
+            html.Br(),
+            html.Br(),
+
+            html.Button('Download JSON', id='download-json-button',style={'textAlign': 'center','background-color':'green' , 'color':'white','border-radius':'5px', 'padding': '20px', 'width':'15%'}),#a button for JSON download
             dcc.Download(id="download-json")
-            
+            ],style={'textAlign': 'center'})
         ])
 
 @dash_app.callback(
@@ -194,7 +198,8 @@ def update_graph_axis(col_chosen, table_data,xaxis_change):
         try:
 
             fig = px.bar(df_group_by_ratings, x=xaxis_change, y=col_chosen, title=f"Ratings by {col_chosen}")
-            fig.update_layout(height=1000, width=1000)
+            fig.update_layout(height=1000, width= 1400)
+            
             
             
             return fig
@@ -228,9 +233,3 @@ def generate_json(n_clicks,table_data):
 
 if __name__ == '__main__':
     app.run(debug=True)
-
-
-
-
-
-

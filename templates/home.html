@@ -1,30 +1,66 @@
 <!DOCTYPE html>
 <!--#done by Ming Quan (2301877) and Zhi Kang (2301862)-->
 <html>
-    <title>Movie Website</title>
-</html>
-<style>
+    <style>
 
-h1{
-    text-align: center;
-}
-button{
-    text-align: center;
-}
-</style>
-<head>
-<body>
+    body{
+        margin:20px
+    }
 
-    <h1>Welcome to our movie website!!</h1>
+    h1{
+        text-align: center;
+    }
+
+    button{
+        text-align: center;
+    }
+    input{
+        outline: solid 1px;
+        padding:15px
+    }
+    .input{
+        background-color: green;
+        outline: none;
+        font:bold;
+    }
+
+    .tophead{
+        padding:20px;
+        background-color:grey;
+    }
+
+    .main{
+        text-align: center;
+        padding: 20px;
     
-    <form method = "POST" enctype="multipart/form-data" action = "/">    
-        <input type="file" name="file" accept=".csv,.json">
-    
-        <input type = "submit" value="Upload">  
-    </form>
-    <p style="color:black;">Choose csv/json file to upload</p>
-  <form action="/show_data" target="_blank">
+    }
+    .test
+    {
+        background-color: blueviolet;
+        text-align: center;
+        font-size: 45px;
+    }
+    </style>
+    <head>
+        <title>Movie Website</title>
+    </head>
+    <body>
+        <div class="tophead">
+            <h1>Welcome to our movie website!!</h1>
+        </div>
         
-    </form>
-</body> 
-</head>
+        <div class="main">
+            <form method = "POST" enctype="multipart/form-data" action = "/">    
+            <input type="file" name="file" accept=".csv,.json">
+        
+            <input class="input" type = "submit" value="Upload">  
+            </form>
+
+            <p>Upload a .CSV/JSON file to view and analyse stored movie data! </p>
+            <form action="/show_data" target="_blank">
+            </form>
+        </div>
+        
+    </body> 
+
+</html>
